@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حالة الطقس</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .weather-info {
+            margin-top: 20px;
+        }
+        .search-bar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>حالة الطقس</h2>
+        <div class="search-bar">
+            <input type="text" id="cityInput" placeholder="أدخل اسم المدينة">
+            <button onclick="getWeather()">بحث</button>
+        </div>
+        <div class="weather-info" id="weatherInfo"></div>
+    </div>
+    <script>
+        const apiKey = 'f70f3d8de6f3656dd7fca02c85996725'; // استبدل هذا بمفتاح API الصحيح الخاص بك
+        const defaultCity = 'Riyadh';
+
+        function getWeather(city = defaultCity) {
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Invalid API key');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const cityName = data.name;
+                    const temperature = data.main.temp;
+                    const humidity = data.main.humidity;
+                    const longitude = data.coord.lon;
+                    const latitude = data.coord.lat;
+
+                    const weatherInfoDiv = document.getElementById('weatherInfo');
+                    weatherInfoDiv.innerHTML = `
+                        <h3>المدينة: ${cityName}</h3>
+                        <p>درجة الحرارة: ${temperature}°C</p>
+                        <p>درجة الرطوبة: ${humidity}%</p>
+                        <p>خطوط الطول: ${longitude}</p>
+                        <p>خطوط العرض: ${latitude}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    const weatherInfoDiv = document.getElementById('weatherInfo');
+                    weatherInfoDiv.innerHTML = '<p>حدث خطأ في جلب بيانات الطقس. تأكد من مفتاح API وحاول مرة أخرى.</p>';
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            getWeather();
+        });
+    </script>
+</body>
+</html>

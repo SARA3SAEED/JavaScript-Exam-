@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .input-group .error {
+            color: red;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل الدخول</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="loginUser">اليوزر</label>
+                <input type="text" id="loginUser" required>
+                <span class="error">اليوزر غير صحيح</span>
+            </div>
+            <div class="input-group">
+                <label for="loginPassword">كلمة السر</label>
+                <input type="password" id="loginPassword" required>
+                <span class="error">كلمة السر غير صحيحة</span>
+            </div>
+            <button type="submit" id="loginBtn">دخول</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let loginUser = document.getElementById('loginUser');
+            let loginPassword = document.getElementById('loginPassword');
+
+            let storedUser = JSON.parse(localStorage.getItem('user'));
+
+            if (storedUser) {
+                if (storedUser.user === loginUser.value) {
+                    if (storedUser.password === loginPassword.value) {
+                        window.location.href = 'profile.html';
+                    } else {
+                        loginPassword.nextElementSibling.style.display = 'block';
+                    }
+                } else {
+                    loginUser.nextElementSibling.style.display = 'block';
+                }
+            } else {
+                alert('لم يتم العثور على مستخدمين مسجلين.');
+            }
+        });
+    </script>
+</body>
+</html>

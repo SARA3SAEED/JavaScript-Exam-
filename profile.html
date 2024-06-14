@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+        }
+        .options button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="username">مرحباً,</h2>
+        <div class="options">
+            <button onclick="window.location.href='player.html'">مواعيد الأذان</button>
+            <button onclick="window.location.href='wather.html'">الطقس</button>
+        </div>
+    </div>
+    <script>
+        let storedUser = JSON.parse(localStorage.getItem('user'));
+        if (storedUser) {
+            document.getElementById('username').textContent = 'مرحباً, ' + storedUser.username;
+        } else {
+            alert('لم يتم العثور على بيانات المستخدم.');
+            window.location.href = 'register.html';
+        }
+    </script>
+</body>
+</html>

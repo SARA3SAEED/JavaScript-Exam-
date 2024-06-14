@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل مستخدم جديد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .input-group .error {
+            color: red;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل مستخدم جديد</h2>
+        <form id="registerForm">
+            <div class="input-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" required>
+                <span class="error">اسم المستخدم يجب أن يكون أكثر من ثلاثة أحرف</span>
+            </div>
+            <div class="input-group">
+                <label for="user">اليوزر</label>
+                <input type="text" id="user" required>
+                <span class="error">اليوزر يجب أن يحتوي على الأقل حرف كبير</span>
+            </div>
+            <div class="input-group">
+                <label for="email">الإيميل</label>
+                <input type="email" id="email" required>
+                <span class="error">الإيميل يجب أن يحتوي على @</span>
+            </div>
+            <div class="input-group">
+                <label for="password">كلمة السر</label>
+                <input type="password" id="password" required>
+                <span class="error">كلمة السر يجب أن تكون أكثر من 4 أرقام</span>
+            </div>
+            <button type="submit" id="submitBtn">تسجيل</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let username = document.getElementById('username');
+            let user = document.getElementById('user');
+            let email = document.getElementById('email');
+            let password = document.getElementById('password');
+
+            let isValid = true;
+
+            // Check username
+            if (username.value.length <= 3) {
+                username.nextElementSibling.style.display = 'block';
+                isValid = false;
+            } else {
+                username.nextElementSibling.style.display = 'none';
+            }
+
+            // Check user
+            if (!/[A-Z]/.test(user.value)) {
+                user.nextElementSibling.style.display = 'block';
+                isValid = false;
+            } else {
+                user.nextElementSibling.style.display = 'none';
+            }
+
+            // Check email
+            if (!/@/.test(email.value)) {
+                email.nextElementSibling.style.display = 'block';
+                isValid = false;
+            } else {
+                email.nextElementSibling.style.display = 'none';
+            }
+
+            // Check password
+            if (password.value.length <= 4) {
+                password.nextElementSibling.style.display = 'block';
+                isValid = false;
+            } else {
+                password.nextElementSibling.style.display = 'none';
+            }
+
+            if (isValid) {
+                localStorage.setItem('user', JSON.stringify({
+                    username: username.value,
+                    user: user.value,
+                    email: email.value,
+                    password: password.value
+                }));
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

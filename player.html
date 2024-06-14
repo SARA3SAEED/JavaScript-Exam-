@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواعيد الأذان</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .prayer-times {
+            margin-top: 20px;
+        }
+        .toggle-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>مواعيد الأذان</h2>
+        <div class="toggle-buttons">
+            <button id="hijriBtn">التاريخ الهجري</button>
+            <button id="gregorianBtn">التاريخ الميلادي</button>
+        </div>
+        <div class="prayer-times" id="prayerTimes"></div>
+    </div>
+    <script>
+        const apiKey = 'YOUR_API_KEY'; // استبدل هذا بمفتاح API الخاص بك
+        const city = 'Riyadh';
+        const country = 'Saudi Arabia';
+        const year = new Date().getFullYear();
+        const month = new Date().getMonth() + 1;
+        const apiUrl = `http://api.aladhan.com/v1/calendarByCity/${year}/${month}?city=${city}&country=${country}&method=2&key=${apiKey}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const today = new Date().getDate();
+                const timings = data.data[today - 1].timings;
+                const hijriDate = data.data[today - 1].date.hijri.date;
+                const gregorianDate = data.data[today - 1].date.gregorian.date;
+
+                const prayerTimesDiv = document.getElementById('prayerTimes');
+                let timingsHtml = `<h3>مواعيد الصلاة</h3>
+                    <p>الفجر: ${timings.Fajr}</p>
+                    <p>الشروق: ${timings.Sunrise}</p>
+                    <p>الظهر: ${timings.Dhuhr}</p>
+                    <p>العصر: ${timings.Asr}</p>
+                    <p>المغرب: ${timings.Maghrib}</p>
+                    <p>العشاء: ${timings.Isha}</p>`;
+
+                prayerTimesDiv.innerHTML = timingsHtml;
+
+                document.getElementById('hijriBtn').addEventListener('click', () => {
+                    prayerTimesDiv.innerHTML = `<h3>التاريخ الهجري: ${hijriDate}</h3>` + timingsHtml;
+                });
+
+                document.getElementById('gregorianBtn').addEventListener('click', () => {
+                    prayerTimesDiv.innerHTML = `<h3>التاريخ الميلادي: ${gregorianDate}</h3>` + timingsHtml;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching prayer times:', error);
+            });
+    </script>
+</body>
+</html>
