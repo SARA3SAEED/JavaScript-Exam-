@@ -52,16 +52,16 @@
         <div class="weather-info" id="weatherInfo"></div>
     </div>
     <script>
-        const apiKey = 'f70f3d8de6f3656dd7fca02c85996725'; // استبدل هذا بمفتاح API الصحيح الخاص بك
-        const defaultCity = 'Riyadh';
+        const apiKey = 'f70f3d8de6f3656dd7fca02c85996725'; 
 
-        function getWeather(city = defaultCity) {
+        function getWeather() {
+            const city = document.getElementById('cityInput').value || 'Riyadh';
             const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
             fetch(apiUrl)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Invalid API key');
+                        throw new Error('Invalid API key or city not found');
                     }
                     return response.json();
                 })
@@ -89,6 +89,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('cityInput').value = 'Riyadh';
             getWeather();
         });
     </script>
